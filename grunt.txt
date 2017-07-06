@@ -1,0 +1,181 @@
+  grunt
+
+    官网：https://gruntjs.com/
+    基于nodejs
+        验证
+            node -v
+            npm -v
+    1、需要安装grunt的命令环境   要识别你的指令
+        npm install grunt-cli -g
+            cli 是命令行的意思
+            -g 全局
+    2、验证是否安装成功
+        grunt --version
+
+    3、需要准备两个文件
+        a)Gruntfile.js   编写任务
+            直接创建
+            b)package.json   工程文件  记录整个项目依赖的模块
+            1、直接创建
+            2、自动创建   推荐
+                npm init  注你先要进项目文件夹
+                    name 注 不要写grunt或者不要不写
+    4、下载本地的grunt  在项目中下载
+        npm install grunt --save-dev
+            ---------------------------
+            npm install grunt            不会保存到工程文件中
+            npm install grunt --save     会保存到工程文件的dependencies
+            npm install grunt --save-dev 会保存到工程文件的devDependencies √
+            ---------------------------
+    5、编写任务
+        module.exports=function (grunt) {
+            一下所有操作在这里面写
+        }
+        a）去下载插件
+            grunt的插件分为两种
+                一种是grunt团队开发的
+                一种是个人开发的
+
+                压缩js grunt-contrib-uglify
+
+            npm install 插件名 --save-dev
+        b)导入你需要的模块
+            grunt.loadNpmTasks('插件名');
+        c)配置具体的任务
+            grunt.initConfig({
+                主任务名：{ //主任务名最好用插件的名称
+                    options: {
+                          选项
+                    },
+                    子任务名：{ //随便
+                        expand:true,  分开压缩
+                        cwd     现在的目录
+                        src:''  要操作的文件源
+                        dest:'' 操作完的目标文件
+                    }
+                }
+            })
+
+            很多文件  *
+            很多文件夹 **
+        d)执行任务
+            grunt 主任务名
+            grunt 主任务名:子任务
+            grunt 需要配置默认项
+        e)配置默认任务
+            grunt.registerTask('default',['任务名'])
+
+    最重要：配置监听
+
+
+    6、常见的插件
+        压缩js      grunt-contrib-uglify
+            options: {
+                  mangle:false //是否破话压缩
+            }
+        压缩css     grunt-contrib-cssmin
+        压缩html    grunt-contrib-htmlmin
+            options: {
+                 removeComments: true,    //删除注释
+                 collapseWhitespace: true //折叠空格
+            }
+        压缩图片    grunt-contrib-imagemin
+                注：*.{png,jpg,gif}
+        监听        grunt-contrib-watch
+                watch:{
+                    a:{
+                        files:'css/*.css',  //要监听的文件
+                        tasks:'cssmin'   //当文件改变时候执行的任务
+                    }
+                }
+        -----------
+           下来练
+        grunt-contrib-concat      合并文件
+        grunt-contrib-jshint      检查js语法规范
+        grunt-contrib-less        less转css
+        grunt-contrib-sass        sass转css
+        grunt-contrib-clean       清理文件和文件夹
+		
+		------------------------------------------------------------------
+		
+		
+		
+		
+		
+		module.exports=function(grunt){
+	//以下所有的操作都在grunt里面
+	//1.导入需要的模块
+	grunt.loadNpmTasks('grunt-contrib-uglify');//压缩js
+	grunt.loadNpmTasks('grunt-contrib-cssmin');//压缩css
+	grunt.loadNpmTasks('grunt-contrib-htmlmin');//压缩html
+	grunt.loadNpmTasks('grunt-contrib-imagemin');//压缩img
+	grunt.loadNpmTasks('grunt-contrib-watch');//设置监听
+	//2.配置具体的任务
+	grunt.initConfig({
+		uglify:{	//主任务名最好用插件的名称
+			options:{		//选项 所有子任务都有
+				mangle:false //是否破坏压缩
+			},
+			aaa:{	//子任务名随便
+			// 	options:{		//选项 单一子任务都有
+			// },
+				expand:true, //分开压缩
+				cwd:'js',	//当前目录
+				src:'*.js'	,//要操作的文件源
+				dest:'build/js/' //操作完的目标文件
+			}
+		},
+		cssmin:{
+			aaa:{
+				expand:true,
+				cwd:'css',
+				src:'*.css',
+				dest:'build/css/'
+
+			}
+		},	
+		htmlmin:{
+			options:{		
+				removeComments:true,//删除注释
+				collapseWhitespace:true //折叠空格
+			},
+			aaa:{
+				expand:true,
+				cwd:'html',
+				src:'*.html',
+				dest:'build/html/'
+
+			}
+		},	
+		imagemin:{
+			aaa:{
+				expand:true,
+				cwd:'img',
+				src:'*.{img,png,gif,JPG}',
+				dest:'build/img/'
+			}
+		},	
+		watch:{
+			aaa:{
+				files:'css/*.css',
+				tasks:'cssmin'
+			}
+		}
+
+	})
+	//配置默认任务
+	grunt.registerTask('default',['uglify','cssmin','htmlmin','imagemin','watch'])
+};
+
+
+
+
+
+
+
+
+
+
+
+
+

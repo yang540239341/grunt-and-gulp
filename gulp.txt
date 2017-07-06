@@ -1,0 +1,96 @@
+gulp
+    和grunt一样
+        原理文件形式
+    区别：比grunt快
+        原理是二进制流形式
+    官网：gulpjs.com
+
+    流程：
+        1、安装gulp命令环境
+            npm install gulp-cli -g
+        2、验证是否成功
+            gulp --version
+        3、准备两个文件
+            gulpfile.js
+            package.json
+        4、下载本地gulp
+            npm install gulp --save-dev
+            npm i gulp -D
+        5、下载插件
+            npm install 插件名 --save-dev
+        6、编写任务
+            a)引入gulp模块
+                var gulp=require('gulp');
+            b)引入插件
+                var uglify = require('gulp-uglify');
+            c)编写任务
+                gulp.task('任务名',function () {
+                    //编写任务
+                    gulp.src('js/aaa.js')
+                    .pipe(uglify())
+                    .pipe(gulp.dest('build/js'));
+                });
+        7、运行
+                gulp 任务名
+
+        8、常见的插件
+            gulp-uglify  压缩js
+            gulp-htmlmin  压缩html
+            gulp-rename   修改文件名
+        注意：gulp他自带watch，不需要下载，只需要配置
+------------------------------------
+
+		
+		
+		
+		
+		
+		var gulp=require('gulp');
+//引入gulp模块
+var uglify=require('gulp-uglify');//引入js插件
+var htmlmin=require('gulp-htmlmin');//引入html插件
+var cssmin=require('gulp-cssmin');//引入css插件
+var rename = require('gulp-rename');//引入更改文件名(格式)插件
+var imagemin = require('gulp-imagemin');//引入图片插件
+//编写任务
+gulp.task('uglify',function(){
+	//编写任务
+	gulp.src('js/*')//取文件
+	.pipe(uglify())//压缩 派送下一个任务
+	.pipe(gulp.dest('build/js'))//文件还回 目标地址
+})
+//压缩html文件
+gulp.task('htmlmin', function() {
+  	 gulp.src('html/*')
+    .pipe(htmlmin({collapseWhitespace: true,removeComments:true}))
+    .pipe(gulp.dest('build/html'));
+});
+//压缩css文件
+gulp.task('cssmin', function () {
+    gulp.src('css/*')
+    .pipe(cssmin())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(gulp.dest('build/css'));
+});
+//压缩图片
+gulp.task('imagemin', () =>
+    gulp.src('img/*')
+	.pipe(imagemin())
+	.pipe(gulp.dest('build/img'))
+);
+//配置监听    多个监听
+gulp.watch('css/*',['cssmin']);
+gulp.watch('html/*',['htmlmin']);
+//配置默认任务
+gulp.task('default',['uglify','htmlmin','cssmin','imagemin']);
+
+
+
+
+
+
+
+
+
+
+
